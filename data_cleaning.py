@@ -3,7 +3,7 @@ import csv
 
 # Reference: https://docs.python.org/3/library/csv.htimport os
 def csv_to_dict(filename):
-    '''onvert reader object into a list of dictionaries'''
+    '''Convert reader object into a list of dictionaries'''
     result_list=[]
     with open(filename, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -13,7 +13,7 @@ def csv_to_dict(filename):
 
 
 def find_matching_in_dict_list(input_dict, value_list):
-    '''# Define a function to loop through a list of dictionaries to find matching values
+    '''Loop through a list of dictionaries to find matching values
     Return a list of dictionaries'''
     new_list = []
     res = []
@@ -39,7 +39,7 @@ def dict_list_to_csv(dict_list, filename):
 
 # Generate a list of csv file paths
 def generate_file_path_list(current_direct=os.getcwd()):
-    '''generate a list of csv file paths'''
+    '''Generate a list of csv file paths'''
     file_list = []
     for subdir, dirs, files in os.walk(current_direct):
         for filename in files:
