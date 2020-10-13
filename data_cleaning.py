@@ -34,13 +34,29 @@ def dict_list_to_csv(dict_list, filename):
         dict_writer.writerows(toCSV)
     return output_file
 
-# Call the funcitons
-print(os.getcwd())
-list_of_csd = ['Newfoundland and Labrador', 'Ontario']
-dict_csd_2014 = csv_to_dict('processed_data/csd_2014.csv')
-list_2014 = find_matching_in_dict_list(dict_csd_2014, list_of_csd)
-dict_list_to_csv(list_2014, '2014')
 
-print(list_2014)
+# Loop through all the files in the directory 
+
+# Generate a list of csv file paths
+def generate_file_path_list(current_direct=os.getcwd()):
+    '''generate a list of csv file paths'''
+    file_list = []
+    for subdir, dirs, files in os.walk(current_direct):
+        for filename in files:
+            filepath = subdir + os.sep + filename
+            if filepath.endswith(".csv"):
+                file_list.append(filepath)
+    return file_list
+
+print(generate_file_path_list())
+
+# Call the funcitons
+# print(os.getcwd())
+# list_of_csd = ['Newfoundland and Labrador', 'Ontario']
+# dict_csd_2014 = csv_to_dict('processed_data/csd_2014.csv')
+# list_2014 = find_matching_in_dict_list(dict_csd_2014, list_of_csd)
+# dict_list_to_csv(list_2014, '2014')
+
+# print(list_2014)
 
 
