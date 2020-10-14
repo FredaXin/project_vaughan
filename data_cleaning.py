@@ -6,7 +6,7 @@ from pathlib import Path
 
 # Reference: https://docs.python.org/3/library/csv.htimport os
 def csv_to_dict(filename):
-    '''Convert reader object into a list of dictionaries'''
+    '''Convert csv file into reader object, then into a list of dictionaries'''
     result_list=[]
     with open(filename, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -49,12 +49,23 @@ def generate_file_path_list(current_direct=os.getcwd()):
                 file_list.append(filepath)
     return file_list
 
+
+
 # Main block: call all the functions 
 if __name__ == '__main__': 
-    print(os.getcwd())
+    # Any mulicipty names can be stored in this list. 
+    # The strings need to be the same as it is on the CSV files.
     list_of_csd = ['Newfoundland and Labrador', 'Ontario']
+
     cwd_path = Path(__file__).parent
+
+    # 1. Change 'processed_data' into the name of the directory where you store all
+    #    the CSV files.
+    # 2. Switch out the file name 'csd_2014.csv' if you want to inspect
+    #    different CSV files.
+    # 3. change the name 'dict_csd_2014' accordingly
     dict_csd_2014 = csv_to_dict(str(cwd_path / 'processed_data' / 'csd_2014.csv'))
+      
     list_2014 = find_matching_in_dict_list(dict_csd_2014, list_of_csd)
     dict_list_to_csv(list_2014, '2014')
 
