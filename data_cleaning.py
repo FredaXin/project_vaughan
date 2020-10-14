@@ -57,6 +57,7 @@ if __name__ == '__main__':
     # The strings need to be the same as it is on the CSV files.
     list_of_csd = ['Newfoundland and Labrador', 'Ontario']
 
+    # Find the parent path of the current working directory
     cwd_path = Path(__file__).parent
 
     # 1. Change 'processed_data' into the name of the directory where you store all
@@ -65,11 +66,15 @@ if __name__ == '__main__':
     #    different CSV files.
     # 3. change the name 'dict_csd_2014' accordingly
     dict_csd_2014 = csv_to_dict(str(cwd_path / 'processed_data' / 'csd_2014.csv'))
-      
+    
+    # Generate a list of dictionary based on chosen list of csd
     list_2014 = find_matching_in_dict_list(dict_csd_2014, list_of_csd)
+    print(list_2014)
+
+    # Convert list of dicts into CSV
     dict_list_to_csv(list_2014, '2014')
 
-    print(list_2014)
+    # Print out the paths of all CSV files in current and sub directories
     print(generate_file_path_list(str(cwd_path)))
 
 
