@@ -4,7 +4,8 @@ import os
 import csv
 from pathlib import Path
 
-NO_VAR = 17
+TOTAL_COLUMN = 17
+CSD = '\ufeffcsd'
 
 # Generate a list of csv file paths
 # Reference: https://www.newbedev.com/python/howto/how-to-iterate-over-files-in-a-given-directory/
@@ -34,7 +35,7 @@ def find_matching_in_dict_list(input_dict, value_list):
     Return a list of dictionaries'''
     new_list = []
     for csd in input_dict: 
-        if csd['\ufeffcsd'] in value_list: 
+        if csd[CSD] in value_list: 
             new_list.append(csd)
     return new_list
 
@@ -80,24 +81,16 @@ def change_column_names(dict_list):
     return dict_list
 
 # Special Treatment for sheet year 2000 - 2013 
-
 def split_years(dict_list):
+    new_dict_list = []
 
     for indv_dict in dict_list:
-
         column_names = list(indv_dict.keys())
-        #print(column_names)
-
         year_list = list(set([name[0:4] for name in column_names if name[0].isdigit()]))
     
-        new_dict_list = []
-
         for year in year_list:
-            
             new_dict = {}
-            new_dict['\ufeffcsd'] = indv_dict['\ufeffcsd']
-
-            #print(new_dict)
+            new_dict[CSD] = indv_dict[CSD]
 
             for name in column_names:
                 if name[0:4] == year:
@@ -124,11 +117,11 @@ def merge_value_unit(dict_list):
     new_dict_list = []
     while dict_list:
         indv_dict_1 = dict_list.pop()
-        if len(indv_dict_1) >= NO_VAR:
+        if len(indv_dict_1) >= TOTAL_COLUMN:
             new_dict_list.append(indv_dict_1)
         else:
             for index, indv_dict_2 in enumerate(dict_list):     
-                if indv_dict_1['\ufeffcsd'] == indv_dict_2['\ufeffcsd'] and indv_dict_1['year'] == indv_dict_2['year']:
+                if indv_dict_1[CSD] == indv_dict_2[CSD] and indv_dict_1['year'] == indv_dict_2['year']:
                     merged_dict = merge_two_dicts(indv_dict_1, indv_dict_2)
                     new_dict_list.append(merged_dict)
                     dict_list.pop(index)
@@ -149,9 +142,8 @@ def consolidate_all_years(value_list, cwd_path=Path(__file__).parent):
         matched_dict_list = find_matching_in_dict_list(dict_list, value_list)
         column_names = get_column_names(matched_dict_list)
 
-        if len(column_names) < 18: 
+        if len(column_names) < TOTAL_COLUMN: 
             year = get_year(column_names)
-            print(year)
 
             dict_list_with_year = add_year_to_dict_list(year, matched_dict_list)
             dict_list_with_changed_column_names = change_column_names(dict_list_with_year)
@@ -161,7 +153,7 @@ def consolidate_all_years(value_list, cwd_path=Path(__file__).parent):
             splitted_dicts_with_year = split_years(matched_dict_list)
             dict_list_with_changed_column_names = change_column_names(splitted_dicts_with_year)
             final_dict_list.extend(dict_list_with_changed_column_names)
-
+ 
     return merge_value_unit(final_dict_list)
 
 
@@ -180,7 +172,7 @@ def dict_list_to_csv(dict_list, filename):
 if __name__ == '__main__': 
     # Any mulicipty names can be stored in this list. 
     # The strings need to be the same as it is on the CSV files.
-    list_of_csd = ['Vaughan, CY', 'Vaughan']
+    list_of_csd = ['Vaughan, CY', 'Vaughan', 'Halifax', 'Halifax, RGM']
 
     final_list = consolidate_all_years(list_of_csd)
 
