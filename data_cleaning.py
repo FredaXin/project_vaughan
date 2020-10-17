@@ -4,6 +4,8 @@ import os
 import csv
 from pathlib import Path
 
+NO_VAR = 17
+
 # Generate a list of csv file paths
 # Reference: https://www.newbedev.com/python/howto/how-to-iterate-over-files-in-a-given-directory/
 def generate_file_path_list(current_direct=os.getcwd()):
@@ -77,21 +79,90 @@ def change_column_names(dict_list):
                 continue
     return dict_list
 
+# Special Treatment for sheet year 2000 - 2013 
+
+def split_years(dict_list):
+
+    for indv_dict in dict_list:
+
+        column_names = list(indv_dict.keys())
+        #print(column_names)
+
+        year_list = list(set([name[0:4] for name in column_names if name[0].isdigit()]))
+    
+        new_dict_list = []
+
+        for year in year_list:
+            
+            new_dict = {}
+            new_dict['\ufeffcsd'] = indv_dict['\ufeffcsd']
+
+            #print(new_dict)
+
+            for name in column_names:
+                if name[0:4] == year:
+                    new_dict[name] = indv_dict[name]
+                    new_dict['year'] = year
+                else:
+                    continue
+            new_dict_list.append(new_dict)
+
+    return new_dict_list
+
+def merge_two_dicts(dict1, dict2):
+
+    new_dict = {}
+    for key, value in dict1.items():
+        new_dict[key] = value
+
+    for key, value in dict2.items():
+        new_dict[key] = value
+
+    return new_dict
+
+def merge_value_unit(dict_list):
+    new_dict_list = []
+    while dict_list:
+        indv_dict_1 = dict_list.pop()
+        if len(indv_dict_1) >= NO_VAR:
+            new_dict_list.append(indv_dict_1)
+        else:
+            for index, indv_dict_2 in enumerate(dict_list):     
+                if indv_dict_1['\ufeffcsd'] == indv_dict_2['\ufeffcsd'] and indv_dict_1['year'] == indv_dict_2['year']:
+                    merged_dict = merge_two_dicts(indv_dict_1, indv_dict_2)
+                    new_dict_list.append(merged_dict)
+                    dict_list.pop(index)
+                    break
+            else:
+                raise RuntimeError(f'problmetic dict: {indv_dict_1}')
+    return new_dict_list
+                    
 
 def consolidate_all_years(value_list, cwd_path=Path(__file__).parent):
+    '''Loop through all csv and consolidate into one dict list'''
     file_path_list = generate_file_path_list(str(cwd_path))
+
     final_dict_list = []
+
     for path in file_path_list:
         dict_list = csv_to_dict(path)
         matched_dict_list = find_matching_in_dict_list(dict_list, value_list)
         column_names = get_column_names(matched_dict_list)
-        year = get_year(column_names)
-        print(year)
-        dict_list_with_year = add_year_to_dict_list(year, matched_dict_list)
-        dict_list_with_changed_column_names = change_column_names(dict_list_with_year)
-        final_dict_list.extend(dict_list_with_changed_column_names)
-    return final_dict_list 
 
+        if len(column_names) < 18: 
+            year = get_year(column_names)
+            print(year)
+
+            dict_list_with_year = add_year_to_dict_list(year, matched_dict_list)
+            dict_list_with_changed_column_names = change_column_names(dict_list_with_year)
+            final_dict_list.extend(dict_list_with_changed_column_names)
+
+        else: 
+            splitted_dicts_with_year = split_years(matched_dict_list)
+            dict_list_with_changed_column_names = change_column_names(splitted_dicts_with_year)
+            final_dict_list.extend(dict_list_with_changed_column_names)
+
+    return merge_value_unit(final_dict_list)
 
 
 # Optional: export dictionary list back to csv
@@ -111,43 +182,7 @@ if __name__ == '__main__':
     # The strings need to be the same as it is on the CSV files.
     list_of_csd = ['Vaughan, CY', 'Vaughan']
 
-    # # Find the parent path of the current working directory
-    # cwd_path = Path(__file__).parent
-
-    # # Print out the paths of all CSV files in current and sub directories
-    # print(generate_file_path_list(str(cwd_path)))
-
-    # # 1. Change 'processed_data' into the name of the directory where you store all
-    # #    the CSV files.
-    # # 2. Switch out the file name 'csd_2014.csv' if you want to inspect
-    # #    different CSV files.
-    # # 3. change the name 'dict_csd_2014' accordingly
-    # #dict_csd_2014 = csv_to_dict(str(cwd_path / 'processed_data' / 'csd_2014.csv'))
-
-
-    # # Generate a list of dictionary based on chosen list of csd
-    # #list_2014 = find_matching_in_dict_list(dict_csd_2014, list_of_csd)
-    # #print(list_2014)
-
-    # column_names = get_column_names(list_2014)
-    # print(column_names)
-
-    # year = get_year(column_names)
-    # print(year)
-
-    # new_dict_list = add_year_to_dict_list(year, list_2014)
-    # print(new_dict_list)
-
-    # new_new_dict_list = change_column_names(new_dict_list)
-    # print(new_new_dict_list)
-
     final_list = consolidate_all_years(list_of_csd)
-    print(final_list)
 
     dict_list_to_csv(final_list, 'test')
  
-
-
-
-    # # Convert list of dicts into CSV
-    # dict_list_to_csv(list_2014, '2014')
