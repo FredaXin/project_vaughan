@@ -7,7 +7,7 @@ from pathlib import Path
 TOTAL_COLUMN = 17
 CSD = '\ufeffcsd'
 
-# Generate a list of csv file paths
+
 # Reference: https://www.newbedev.com/python/howto/how-to-iterate-over-files-in-a-given-directory/
 def generate_file_path_list(current_direct=os.getcwd()):
     '''Generate a list of csv file paths'''
@@ -18,6 +18,7 @@ def generate_file_path_list(current_direct=os.getcwd()):
             if filepath.endswith(".csv"):
                 file_list.append(filepath)
     return file_list
+
 
 # Reference: https://docs.python.org/3/library/csv.htimport os
 def csv_to_dict(filename):
@@ -39,9 +40,11 @@ def find_matching_in_dict_list(input_dict, value_list):
             new_list.append(csd)
     return new_list
 
+
 def get_column_names(dict_list):
-    '''Return all the columns names of a dict list'''
+    '''Return all the columns names of a dictionary list as a list'''
     return list(dict_list[0].keys())
+
 
 def get_year(column_names):
     '''Find the year of the dataframe'''
@@ -52,21 +55,13 @@ def get_year(column_names):
             break 
     return int(year)
 
+
 def add_year_to_dict_list(year, dict_list):
     '''Add the year to the dict list as new key:value pair'''
     for dict in dict_list:
         dict['year'] = year
     return dict_list
 
-
-# def clean_label(l: str) -> str:
-#     return l[5:] if l[0].isdigit() else l
-
-# def clean_dict_labels(d: dict) -> dict:
-#     return {clean_label(k): v for k, v in d.items()}
-     
-# def change_column_names_(dict_list: 'list(dict)') -> 'list(dict)':
-#     return [clean_dict_labels(d) for d in dict_list]
 
 def change_column_names(dict_list):
     '''Strip the year from column names'''
@@ -80,8 +75,14 @@ def change_column_names(dict_list):
                 continue
     return dict_list
 
+
 # Special Treatment for sheet year 2000 - 2013 
 def split_years(dict_list):
+    '''
+    For csv files contains multiple years on one sheet.
+    Take a list of dictionaries, output a list dictionaries with each year as
+    separate dictionary.
+    '''
     new_dict_list = []
 
     for indv_dict in dict_list:
@@ -102,9 +103,11 @@ def split_years(dict_list):
 
     return new_dict_list
 
-def merge_two_dicts(dict1, dict2):
 
+def merge_two_dicts(dict1, dict2):
+    '''Merge two dictionaries into one'''
     new_dict = {}
+
     for key, value in dict1.items():
         new_dict[key] = value
 
@@ -114,7 +117,9 @@ def merge_two_dicts(dict1, dict2):
     return new_dict
 
 def merge_value_unit(dict_list):
+    '''merge the value and unit sheets into one dictionary'''
     new_dict_list = []
+
     while dict_list:
         indv_dict_1 = dict_list.pop()
         if len(indv_dict_1) >= TOTAL_COLUMN:
@@ -132,7 +137,7 @@ def merge_value_unit(dict_list):
                     
 
 def consolidate_all_years(value_list, cwd_path=Path(__file__).parent):
-    '''Loop through all csv and consolidate into one dict list'''
+    '''Loop through all csv files and consolidate into one dictionary list'''
     file_path_list = generate_file_path_list(str(cwd_path))
 
     final_dict_list = []
@@ -142,9 +147,9 @@ def consolidate_all_years(value_list, cwd_path=Path(__file__).parent):
         matched_dict_list = find_matching_in_dict_list(dict_list, value_list)
         column_names = get_column_names(matched_dict_list)
 
+        # Based on the original data file type, process the data accordingly
         if len(column_names) < TOTAL_COLUMN: 
             year = get_year(column_names)
-
             dict_list_with_year = add_year_to_dict_list(year, matched_dict_list)
             dict_list_with_changed_column_names = change_column_names(dict_list_with_year)
             final_dict_list.extend(dict_list_with_changed_column_names)
