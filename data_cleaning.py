@@ -30,16 +30,27 @@ def csv_to_dict(filename):
             result_list.append(dict(row))
     return result_list
 
-
+# Two matching functions below: partial vs. exact
 def find_matching_in_dict_list(input_dict, value_list):
     '''Loop through a list of dictionaries to find matching values
-    Return a list of dictionaries'''
+    Return a list of dictionaries
+    Partial String Match'''
     new_list = []
     for csd in input_dict: 
-        if csd[CSD] in value_list: 
-            new_list.append(csd)
+        for value in value_list:
+            if csd[CSD] in value_list or value in csd[CSD]: 
+                new_list.append(csd)
     return new_list
 
+# def find_matching_in_dict_list(input_dict, value_list):
+#     '''Loop through a list of dictionaries to find matching values
+#     Return a list of dictionaries
+#     Exact String Match'''
+#     new_list = []
+#     for csd in input_dict: 
+#         if csd[CSD] in value_list: 
+#             new_list.append(csd)
+#     return new_list
 
 def get_column_names(dict_list):
     '''Return all the columns names of a dictionary list as a list'''
@@ -177,8 +188,7 @@ def dict_list_to_csv(dict_list, filename):
 if __name__ == '__main__': 
     # Any mulicipty names can be stored in this list. 
     # The strings need to be the same as it is on the CSV files.
-    list_of_csd = ['Vaughan, CY', 'Vaughan', 'Halifax', 'Halifax, RGM']
-
+    list_of_csd = ['Toronto']
     final_list = consolidate_all_years(list_of_csd)
 
     dict_list_to_csv(final_list, 'test')
