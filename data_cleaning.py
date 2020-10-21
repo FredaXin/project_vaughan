@@ -31,6 +31,7 @@ def csv_to_dict(filename):
     return result_list
 
 # Two matching functions below: partial vs. exact
+# Please choose one of them based on your need
 def find_matching_in_dict_list(input_dict, value_list):
     '''Loop through a list of dictionaries to find matching values
     Return a list of dictionaries
