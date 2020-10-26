@@ -192,12 +192,37 @@ def dict_list_to_csv(dict_list, filename):
 if __name__ == '__main__': 
     # Any mulicipty names can be stored in this list. 
 
-    # Demo: 
-    #list_of_csd = ['Vaughan']
-    #list_of_csd = ['Vaughan', 'Vaughan, CY']
-    #list_of_csd = ['Toronto']
-    #list_of_csd = ['Toronto', 'Toronto, C']
-    list_of_csd = ['Toronto', 'Vaughan']
+    list_of_csd = [
+                'Toronto', 
+                'Montreal',
+                'Calgary',
+                'Ottawa',
+                'Edmonton',
+                'Mississauga',
+                'North York',
+                'Winnipeg',
+                'Scarborough',
+                'Vancouver',
+                'Quebec',
+                'Hamilton',
+                'Brampton',
+                'Surrey',
+                'Laval',
+                'Halifax',
+                'Etobicoke',    
+                'London',
+                'Okanagan', 
+                'Victoria',
+                'Windsor',
+                'Markham',
+                'Oshawa',
+                'Gatineau',
+                'Vaughan',
+                'Kitchener',
+                'Longueuil',
+                'Burnaby',
+                'Ladner'
+                ]
 
     final_list = consolidate_all_years(list_of_csd)
 
