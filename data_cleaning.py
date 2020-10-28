@@ -190,38 +190,56 @@ def dict_list_to_csv(dict_list, filename):
 
 # Main block: call all the functions 
 if __name__ == '__main__': 
-    # Any mulicipty names can be stored in this list. 
+    
+    ## List of municipalities. Selected based on population sizes.
+    # list_of_csd = [
+    #             'Toronto', 
+    #             'Montreal',
+    #             'Calgary',
+    #             'Ottawa',
+    #             'Edmonton',
+    #             'Mississauga',
+    #             'North York',
+    #             'Winnipeg',
+    #             'Scarborough',
+    #             'Vancouver',
+    #             'Quebec',
+    #             'Hamilton',
+    #             'Brampton',
+    #             'Surrey',
+    #             'Laval',
+    #             'Halifax',
+    #             'Etobicoke',    
+    #             'London',
+    #             'Okanagan', 
+    #             'Victoria',
+    #             'Windsor',
+    #             'Markham',
+    #             'Oshawa',
+    #             'Gatineau',
+    #             'Vaughan',
+    #             'Kitchener',
+    #             'Longueuil',
+    #             'Burnaby',
+    #             'Ladner',
+    #             ]
 
+    ## To deal with the inconsisity in naming of the source data, i.e. some years without the accent for French names, 
+    ## we added two more to the list.
+    # list_of_csd = [
+    #             'Montréal',
+    #             'Québec'
+    #             ]
+
+    ## Added more cities in York region.
     list_of_csd = [
-                'Toronto', 
-                'Montreal',
-                'Calgary',
-                'Ottawa',
-                'Edmonton',
-                'Mississauga',
-                'North York',
-                'Winnipeg',
-                'Scarborough',
-                'Vancouver',
-                'Quebec',
-                'Hamilton',
-                'Brampton',
-                'Surrey',
-                'Laval',
-                'Halifax',
-                'Etobicoke',    
-                'London',
-                'Okanagan', 
-                'Victoria',
-                'Windsor',
-                'Markham',
-                'Oshawa',
-                'Gatineau',
-                'Vaughan',
-                'Kitchener',
-                'Longueuil',
-                'Burnaby',
-                'Ladner'
+                'Richmond Hill',
+                'King',
+                'Stouffville',
+                'Aurora',
+                'Newmarket',
+                'Georgina',
+                'East Gwillimbury'
                 ]
 
     final_list = consolidate_all_years(list_of_csd)
