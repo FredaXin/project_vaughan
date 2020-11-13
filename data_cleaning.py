@@ -191,45 +191,41 @@ def dict_list_to_csv(dict_list, filename):
 # Main block: call all the functions 
 if __name__ == '__main__': 
     
-    ## List of municipalities. Selected based on population sizes.
+    # List of CSDs.
+    # Selected using 2016 Cesus data top 25 most populated CSDs
+    # To deal with the inconsisity in naming of the source data, i.e. some years without the accent for French names, 
+    # we added two more to the list.
+
     # list_of_csd = [
-    #             'Toronto', 
+    #             'Toronto',
     #             'Montreal',
     #             'Calgary',
     #             'Ottawa',
     #             'Edmonton',
     #             'Mississauga',
-    #             'North York',
     #             'Winnipeg',
-    #             'Scarborough',
     #             'Vancouver',
-    #             'Quebec',
-    #             'Hamilton',
     #             'Brampton',
+    #             'Hamilton',
+    #             'Quebec',
     #             'Surrey',
     #             'Laval',
     #             'Halifax',
-    #             'Etobicoke',    
     #             'London',
-    #             'Okanagan', 
-    #             'Victoria',
-    #             'Windsor',
     #             'Markham',
-    #             'Oshawa',
-    #             'Gatineau',
     #             'Vaughan',
-    #             'Kitchener',
+    #             'Gatineau',
+    #             'Saskatoon',
     #             'Longueuil',
+    #             'Kitchener',
     #             'Burnaby',
-    #             'Ladner',
-    #             ]
-
-    ## To deal with the inconsisity in naming of the source data, i.e. some years without the accent for French names, 
-    ## we added two more to the list.
-    # list_of_csd = [
+    #             'Windsor',
+    #             'Regina',
+    #             'Richmond',
     #             'Montréal',
     #             'Québec'
     #             ]
+
 
     ## Added more cities in York region.
     list_of_csd = [
