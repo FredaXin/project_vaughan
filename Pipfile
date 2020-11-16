@@ -10,6 +10,8 @@ beautifulsoup4 = "*"
 lxml = "*"
 html5lib = "*"
 requests = "*"
+pandas = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.7"
