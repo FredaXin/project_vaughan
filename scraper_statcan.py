@@ -16,7 +16,10 @@ for row in list_of_rows:
     new_dict = {}
 
     csd = row.find('th', class_=lambda cs: cs is not None and 'ROWSTUBCELLMONO' in cs)
-    new_dict['CSD'] = csd.text.split('\xa0')[0] if csd is not None else None
+    #new_dict['CSD'] = csd.text.split('\xa0')[0] if csd is not None else None
+    new_dict['CSD'] = csd.text.replace('\xa0', ' ') if csd is not None else None
+    #new_dict['CSD'] = [i.replace('\xa0', ' ') for i in new_dict['CSD']]
+    
 
     pop_2006 = row.find('td', headers=lambda hs: hs is not None and "col_2_1" in hs)
     new_dict['2006'] = pop_2006.text if csd is not None else None
