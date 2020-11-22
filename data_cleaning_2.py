@@ -21,7 +21,7 @@ print(f'Geographic code is unique: {pd.Series(census_2011_2006["Geographic code"
 
 # Select relevant columns
 pop_2001 = census_2006_2001[['CSD', '2001']]
-pop_2006 = census_2011_2006[['Geographic code', 'Geographic name', 'Population, 2006']]
+pop_2006 = census_2011_2006[['Geographic code', 'Geographic name', 'Geographic type','Population, 2006']]
 pop_2016_2011 = census_2016_2011[['Geographic code', 'Geographic name', 'Province or territory', 'Population, 2016', 'Population, 2011']]
 
 # Merge census data from all years
@@ -33,13 +33,18 @@ pop_2001_to_2016.drop('Geographic name_x', axis=1, inplace=True)
 pop_2001_to_2016.drop(0, axis=0, inplace=True)
 
 # Rearrange the order of the columns
-pop_2001_to_2016 = pop_2001_to_2016[['CSD', 'Geographic name_y', 'Province or territory', 'Geographic code', 
-                                     '2001', 'Population, 2006', 'Population, 2011', 'Population, 2016']]
+pop_2001_to_2016 = pop_2001_to_2016[[
+                                'CSD', 'Geographic name_y', 'Province or territory', 
+                                'Geographic code', 'Geographic type',
+                                '2001', 'Population, 2006', 
+                                'Population, 2011', 'Population, 2016']]
                                      
 # Rename columns                                   
-pop_2001_to_2016 = pop_2001_to_2016.rename(columns={'Geographic name_y': 'CSD_CD', 
+pop_2001_to_2016 = pop_2001_to_2016.rename(columns={'Geographic name_y': 'CSD_0', 
+                                                    'CSD': 'CSD_1',
                                                     'Province or territory': 'province_or_territory',
                                                     'Geographic code': 'geographic_code',
+                                                    'Geographic type': 'geographic_type',
                                                     'Population, 2006': '2006',
                                                     'Population, 2011': '2011', 
                                                     'Population, 2016': '2016'})
@@ -53,6 +58,9 @@ convert_dict = {'geographic_code': int,
                 '2011': int,
                 '2016': int} 
 pop_2001_to_2016 = pop_2001_to_2016.astype(convert_dict) 
+
+# Export df to csv
+pop_2001_to_2016.to_csv('census_2001_to_2016.csv', index=False)
 
 
 def recorded_year(year):
@@ -83,7 +91,7 @@ def pop_by_city_prov_year(pops: pd.DataFrame) -> '(str, str, int) -> int':
     def lookup(city: str, prov: str,  year: int) -> int:
         year = str(recorded_year(year))
         try:
-            singleton_df = pops.loc[(pops['CSD_CD'] == city) & (pops['province_or_territory'] == prov)]
+            singleton_df = pops.loc[(pops['CSD_0'] == city) & (pops['province_or_territory'] == prov)]
             series = singleton_df.iloc[0]
             population = series[year]
             return population
