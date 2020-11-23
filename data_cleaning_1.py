@@ -63,7 +63,7 @@ target_csd_list_2 = list(set(census['CSD_0'].head(26)))
 
 
 
-### Deal with 2000 to 2017 permit data ###
+#### Deal with 2000 to 2017 permit data ####
 
 top_25_00to17 = top_25[top_25['year'] <= 2017]
 csd_list_00to17 = sorted(list(top_25_00to17['csd'].unique())) 
@@ -92,29 +92,61 @@ top_25_00to17 = top_25_00to17.sort_values(['csd', 'year'], ascending=[True, True
 mask_1 = top_25_00to17.duplicated(keep=False)
 # print(f'duplicated rows: {top_25_00to17[mask_1]}')
 
+# # Drop rows that all values (excpet for columns 'csd' and 'year') are 0
+# top_25_00to17['sum'] = top_25_00to17.iloc[:, 2:16].sum(axis=1)
+# print(top_25_00to17[top_25_00to17['sum'] == 0])
+
+
 # Check if each csd contains from 2000 to 2017 data
 # Check if there is duplicates for each csd
 # For each csd, it should have one row for each year. Each csd should include 18
 # years. Any csd that has less or more than 18 is a problem.
 temp_df_1 = top_25_00to17.groupby(['csd']).count().reset_index()
 problem_set_1 = set(temp_df_1[temp_df_1['year'] != 18]['csd'])
-print(problem_set_1)
+# print(problem_set_1)
+# print(temp_df_1[temp_df_1['year'] != 18])
 
 # Check if for each csd, each year is included. If the count of year does not eqaul
 # 1, it is a porblem.
 temp_df_2 = top_25_00to17.groupby(['csd', 'year']).size().to_frame(name='count').reset_index()
-problem_set_2 = set(temp_df_2[temp_df_2['count'] !=1 ]['csd'])
-print(problem_set_2)
-print(temp_df_2[temp_df_2['count']!=1])
+problem_set_2 = set(temp_df_2[temp_df_2['count'] != 1]['csd'])
+temp_df_2_1 = temp_df_2[temp_df_2['count'] != 1]
+# print(problem_set_2)
+# print(temp_df_2_1)
+
+subset = temp_df_2_1[['csd', 'year']]
+tup_list = [tuple(x) for x in subset.values]
 
 # Check if the two problem groups are the same.
 # print(problem_set_1 == problem_set_2)
 
 # TODO: Investigate the csd in these group
-# {'Montréal, V', 'Hamilton, C', 'Gatineau, V', 'Québec, V', 'Toronto, C', 'Longueuil, V'}
+# {'Montréal, V', 'Hamilton, C', 'Gatineau, V', 'Québec, V', 'Toronto, C',
+# 'Longueuil, V'}
+
+# TODO: 'Markham, T', 'Ottawa, CV'
 
 
-### Deal with 2018 to 2019 permit data ###
+def update_df(df, tup_list):
+    for csd, year in tup_list:
+        index_tup = list(df[(df['csd'] == csd) & (df['year'] == year)].index)
+
+        temp_ser = df.loc[[index_tup[0], index_tup[1]]].sum()
+        df = df.drop(index_tup)
+        temp_ser['csd'] = csd
+        temp_ser['year'] = year
+        df = df.append(temp_ser, ignore_index=True)
+    return df
+
+top_25_00to17 = update_df(top_25_00to17, tup_list)
+
+# Get rid of Census subdivisions types in the csd
+top_25_00to17['csd'] = top_25_00to17['csd'].apply(lambda x: x.split(", ")[0])
+
+
+
+
+#### Deal with 2018 to 2019 permit data ####
 
 top_25_18to19 = top_25[top_25['year'] > 2017]
 csd_list_18to19 = sorted(list(top_25_18to19['csd'].unique())) 
@@ -153,18 +185,16 @@ problem_list_3 = list(set(temp_df_3[temp_df_3['year'] != 2]['csd']))
 # print(problem_list_3)
 # print(temp_df_3[temp_df_3['year']!=2])
 
-
 # Check if for each csd, each year is included. If the count of year does not eqaul
 # 1, it is a porblem.
 temp_df_4 = top_25_18to19.groupby(['csd', 'year']).size().to_frame(name='count').reset_index()
 problem_list_4 = list(set(temp_df_4[temp_df_4['count'] > 1]['csd']))
 # print(temp_df_4.head())
 # print(problem_set_4)
-print(temp_df_4[temp_df_4['count'] != 1])
+# print(temp_df_4[temp_df_4['count'] != 1])
 
 # Check if the two problem groups are the same.
 # print(problem_set_1 == problem_set_2)
-
 
 # # # Choose the Hamilton under the Hamilton Devision 
 # # Hamilton ('Hamilton, C')  2018 Value of permit commercial 65974000
@@ -226,3 +256,17 @@ def get_index_list(df, reference_list):
 index_list = get_index_list(top_25_18to19, reference_list)
 top_25_18to19.drop(index_list, axis=0, inplace=True)
 
+# Change units of value to 1000s, since it's consistant with year 2000 to 2017
+col_list = [i for i in list(top_25_18to19.columns) if i.startswith('value')]
+top_25_18to19[col_list] = top_25_18to19[col_list]/1000
+
+
+
+
+#### Combine top_25_00to17 and top_25_18to19
+new_top_25 = pd.concat([top_25_00to17, top_25_18to19], ignore_index=True)
+new_top_25 = new_top_25.sort_values(['csd', 'year'], ascending=[True, True])
+# print(new_top_25.shape)
+# print(new_top_25.head(25))
+
+new_top_25.to_csv('cleand_building_permits_2000_2019_top_25.csv', index=False)
