@@ -49,19 +49,26 @@ york_region[columns_to_change_york] = york_region[columns_to_change_york].apply(
 # print(sorted(list(top_25['csd'].unique())), len(list(top_25['csd'].unique())))
 
 # Notes: 
-# For the naming of CSD, from 2000 to 2017 are consistant; 
+# For the naming of csd, from 2000 to 2017 are consistant; 
 # 2018 & 2019 are without Census subdivisions types. 
 # More info about the Census subdivisions types:
 # https://www12.statcan.gc.ca/census-recensement/2016/ref/dict/geo012-eng.cfm
 
 # Target CSD List
-# The list is chosen from 
+# The list is selected based on the top 25 most populated csds in 2016.
+# Reference: https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/hlt-fst/pd-pl/Table.cfm?Lang=Eng&T=307&SR=1&S=3&O=D&RPP=9999&PR=0
 census.sort_values(by='2016',  ascending=False, inplace=True)
 census['CSD&type'] = census['CSD_0'] + ', ' + census['geographic_type']
 target_csd_list_1 = list(set(census['CSD&type'].head(26)))
 target_csd_list_2 = list(set(census['CSD_0'].head(26)))
+# print(target_csd_list_1)
 
-
+# NOTE: 'Markham, T', 'Ottawa, CV'
+# 'Markham, T' was swtiched to 'Markham, CY' since 2013
+# 'Ottawa, CV' was swtiched to 'Ottawa, C' since 2001
+# Therefore, we added 'Markham, CY' and 'Ottawa, C' to the target_csd_list_1.
+target_csd_list_1.extend(['Markham, CY', 'Ottawa, C'])
+# print(target_csd_list_1)
 
 #### Deal with 2000 to 2017 permit data ####
 
@@ -124,8 +131,6 @@ tup_list = [tuple(x) for x in subset.values]
 # {'Montréal, V', 'Hamilton, C', 'Gatineau, V', 'Québec, V', 'Toronto, C',
 # 'Longueuil, V'}
 
-# TODO: 'Markham, T', 'Ottawa, CV'
-
 
 def update_df(df, tup_list):
     for csd, year in tup_list:
@@ -143,7 +148,13 @@ top_25_00to17 = update_df(top_25_00to17, tup_list)
 # Get rid of Census subdivisions types in the csd
 top_25_00to17['csd'] = top_25_00to17['csd'].apply(lambda x: x.split(", ")[0])
 
-
+# Deal with 'Markham, T' & 'Markham, CY'; 'Ottawa, CV' & 'Ottawa, C'
+# Remove the year where all col values are 0s.
+col_list = top_25_00to17.columns
+col_list = [i for i in col_list if i not in ['csd', 'year']]
+top_25_00to17['sum'] = top_25_00to17[col_list].sum(axis=1)
+top_25_00to17 = top_25_00to17[top_25_00to17['sum'] != 0]
+top_25_00to17.drop(columns=['sum'], inplace=True)
 
 
 #### Deal with 2018 to 2019 permit data ####
@@ -269,4 +280,4 @@ new_top_25 = new_top_25.sort_values(['csd', 'year'], ascending=[True, True])
 # print(new_top_25.shape)
 # print(new_top_25.head(25))
 
-new_top_25.to_csv('cleand_building_permits_2000_2019_top_25.csv', index=False)
+new_top_25.to_csv('cleaned_building_permits_2000_2019_top_25.csv', index=False)
