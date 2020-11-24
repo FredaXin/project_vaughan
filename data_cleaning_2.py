@@ -7,9 +7,13 @@ def change_path(input_path):
 
 change_path('/Users/fredaxin/projects/project_vaughan')
 
+top_25 = pd.read_csv('./processed_data_1/cleaned_building_permits_2000_2019_top_25.csv')
+york = pd.read_csv('./processed_data_1/cleaned_building_permits_2000_2019_york_region.csv')
 
-#TODO Change path
-permits = pd.read_csv('~/Desktop/Processed_Data.csv')
+
+##########################
+#  Process Census Data   #
+##########################
 
 census_2006_2001 = pd.read_csv('./census_data/census_2006_2001.csv')
 census_2011_2006 = pd.read_csv('./census_data/census_2011_2006.csv', encoding='latin-1')
@@ -60,8 +64,12 @@ convert_dict = {'geographic_code': int,
 pop_2001_to_2016 = pop_2001_to_2016.astype(convert_dict) 
 
 # Export df to csv
-pop_2001_to_2016.to_csv('census_2001_to_2016.csv', index=False)
+# pop_2001_to_2016.to_csv('census_2001_to_2016.csv', index=False)
 
+
+########################################
+#  Merge Census Data with Permit Data  #
+########################################
 
 def recorded_year(year):
     '''
@@ -106,16 +114,21 @@ def set_city_year_pop(pop_f:'(str, str, int) -> int') -> 'pd.Series -> pd.Series
     The output function takes a pandas series and return a pandas series.
     '''
     def func(s: pd.Series):
-        population = pop_f(s['City'], s['Province'], s['Year'])
-        new_pop = pd.Series({'Population2': population})
+        population = pop_f(s['csd'], s['province_or_territory'], s['year'])
+        new_pop = pd.Series({'population': population})
         return s.append(new_pop)
     return func
 
 pop_lookup_func = pop_by_city_prov_year(pop_2001_to_2016)
 pop_set_func = set_city_year_pop(pop_lookup_func)
 
-print(permits.apply(pop_set_func, axis=1))
-# print(pop_by_city_prov_year(pop_2001_to_2016)('Toronto', 'Ontario', 2001))
+top_25 = top_25.apply(pop_set_func, axis=1)
+york = york.apply(pop_set_func, axis=1)
+
+# Export result as csv file
+top_25.to_csv('cleaned_building_permits&pop_top_25.csv', index=False)
+york.to_csv('cleaned_building_permits&pop_york_region.csv', index=False)
+
 
 
     

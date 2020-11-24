@@ -286,6 +286,27 @@ new_top_25 = new_top_25.sort_values(['csd', 'year'], ascending=[True, True])
 # print(new_top_25.shape)
 # print(new_top_25.head(25))
 
+# Add column 'province_or_territory'
+temp_cens = census[census['CSD&type'].isin(target_csd_list_1)][['CSD_0', 'province_or_territory']]
+temp_cens.drop_duplicates(inplace=True)
+print(temp_cens)
+new_top_25 = pd.merge(new_top_25, temp_cens, left_on='csd', right_on='CSD_0', how='left')
+new_top_25.drop(columns='CSD_0', inplace=True)
+
+# Change column orders 
+new_top_25 = new_top_25[[
+    'csd', 'province_or_territory', 'year', 'value_nonresidential_commercial',
+    'value_nonresidential_industrial', 'value_nonresidential_institutional',
+    'value_residential_single_single', 'value_residential_single_mobile',
+    'value_residential_single_cottage', 'value_residential_multiple_double',
+    'value_residential_multiple_row',
+    'value_residential_multiple_apartment',
+    'units_residential_single_single', 'units_residential_single_mobile',
+    'units_residential_single_cottage', 'units_residential_multiple_double',
+    'units_residential_multiple_row',
+    'units_residential_multiple_apartment'
+    ]]
+
 # Export result as csv file
 # new_top_25.to_csv('cleaned_building_permits_2000_2019_top_25.csv', index=False)
 
@@ -347,7 +368,7 @@ york_18to19[col_list] = york_18to19[col_list_2]/1000
 
 
 ##############################################
-#  Combine york_00to17 and york_18to19   #
+#    Combine york_00to17 and york_18to19     #
 ##############################################
 
 
@@ -355,5 +376,24 @@ new_york_region = pd.concat([york_00to17, york_18to19], ignore_index=True)
 new_york_region = new_york_region.sort_values(['csd', 'year'], ascending=[True, True])
 
 
+# Add column 'province_or_territory'
+new_york_region['province_or_territory'] = 'Ontario'
+
+
+# Change column orders 
+new_york_region = new_york_region[[
+    'csd', 'province_or_territory', 'year', 'value_nonresidential_commercial',
+    'value_nonresidential_industrial', 'value_nonresidential_institutional',
+    'value_residential_single_single', 'value_residential_single_mobile',
+    'value_residential_single_cottage', 'value_residential_multiple_double',
+    'value_residential_multiple_row',
+    'value_residential_multiple_apartment',
+    'units_residential_single_single', 'units_residential_single_mobile',
+    'units_residential_single_cottage', 'units_residential_multiple_double',
+    'units_residential_multiple_row',
+    'units_residential_multiple_apartment'
+    ]]
+
 # Export result as csv file
-# new_york_region.to_csv('cleaned_building_permits_2000_2019_york_region.csv', index=False)
+# new_york_region.to_csv('cleaned_building_permits_2000_2019_york_region.csv',
+# index=False)
