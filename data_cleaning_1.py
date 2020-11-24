@@ -289,7 +289,6 @@ new_top_25 = new_top_25.sort_values(['csd', 'year'], ascending=[True, True])
 # Add column 'province_or_territory'
 temp_cens = census[census['CSD&type'].isin(target_csd_list_1)][['CSD_0', 'province_or_territory']]
 temp_cens.drop_duplicates(inplace=True)
-print(temp_cens)
 new_top_25 = pd.merge(new_top_25, temp_cens, left_on='csd', right_on='CSD_0', how='left')
 new_top_25.drop(columns='CSD_0', inplace=True)
 
