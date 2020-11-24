@@ -11,15 +11,6 @@ top_25 = pd.read_csv('./processed_data_1/building_permits_2000_2019_top_25.csv')
 york_region = pd.read_csv('./processed_data_1/building_permits_2000_2019_york_region.csv')
 census = pd.read_csv('./processed_data_1/census_2001_to_2016.csv')
 
-# print(
-#     top_25.head(), 
-#     top_25.info()
-#     )
-
-# print(
-#     york_region.head(),
-#     york_region.info()
-# )
 
 # Change data types
 def obj_to_int(series):
@@ -44,6 +35,12 @@ columns_to_change_york = [
     'value_residential_multiple_row', 'value_residential_multiple_apartment',
     ]
 york_region[columns_to_change_york] = york_region[columns_to_change_york].apply(obj_to_int, axis=1)
+
+
+##########################
+#     Process Top 25     #
+##########################
+
 
 # Check unique values 
 # print(sorted(list(top_25['csd'].unique())), len(list(top_25['csd'].unique())))
@@ -70,7 +67,11 @@ target_csd_list_2 = list(set(census['CSD_0'].head(26)))
 target_csd_list_1.extend(['Markham, CY', 'Ottawa, C'])
 # print(target_csd_list_1)
 
-#### Deal with 2000 to 2017 permit data ####
+
+##########################
+#  Process 2000 to 2017  #
+##########################
+
 
 top_25_00to17 = top_25[top_25['year'] <= 2017]
 csd_list_00to17 = sorted(list(top_25_00to17['csd'].unique())) 
@@ -157,7 +158,9 @@ top_25_00to17 = top_25_00to17[top_25_00to17['sum'] != 0]
 top_25_00to17.drop(columns=['sum'], inplace=True)
 
 
-#### Deal with 2018 to 2019 permit data ####
+##########################
+#  Process 2018 to 2019  #
+##########################
 
 top_25_18to19 = top_25[top_25['year'] > 2017]
 csd_list_18to19 = sorted(list(top_25_18to19['csd'].unique())) 
@@ -273,11 +276,84 @@ top_25_18to19[col_list] = top_25_18to19[col_list]/1000
 
 
 
+##############################################
+#  Combine top_25_00to17 and top_25_18to19   #
+##############################################
 
-#### Combine top_25_00to17 and top_25_18to19
+
 new_top_25 = pd.concat([top_25_00to17, top_25_18to19], ignore_index=True)
 new_top_25 = new_top_25.sort_values(['csd', 'year'], ascending=[True, True])
 # print(new_top_25.shape)
 # print(new_top_25.head(25))
 
-new_top_25.to_csv('cleaned_building_permits_2000_2019_top_25.csv', index=False)
+# Export result as csv file
+# new_top_25.to_csv('cleaned_building_permits_2000_2019_top_25.csv', index=False)
+
+
+##########################
+#  Process York Region   #
+##########################
+
+
+york_csd_list = [
+    'Aurora', 
+    'East Gwillimbury', 
+    'Georgina', 
+    'King', 
+    'Newmarket', 
+    'Richmond Hill', 
+    'Whitchurch-Stouffville'
+    ]
+
+
+target_list_3 = list(census[census['CSD_0'].isin(york_csd_list)]['CSD&type'])
+# print(target_list_3)
+
+
+##########################
+#  Process 2000 to 2017  #
+##########################
+
+york_00to17 = york_region[york_region['year'] <= 2017]
+york_00to17 = york_00to17[york_00to17['csd'].isin(target_list_3)]
+
+# Sort the df by csd and year
+york_00to17 = york_00to17.sort_values(['csd', 'year'], ascending=[True, True])
+
+# Check if for each csd, each year is included. If the count of year does not eqaul
+# 1, it is a porblem. 
+# The result is a empty set. 
+temp_df_3 = york_00to17.groupby(['csd', 'year']).size().to_frame(name='count').reset_index()
+problem_set_3 = set(temp_df_3[temp_df_3['count'] != 1]['csd'])
+# print(problem_set_3)
+
+# Get rid of Census subdivisions types in the csd
+york_00to17['csd'] = york_00to17['csd'].apply(lambda x: x.split(", ")[0])
+
+
+##########################
+#  Process 2018 to 2019  #
+##########################
+
+york_18to19 = york_region[york_region['year'] > 2017]
+york_18to19 = york_18to19[york_18to19['csd'].isin(york_csd_list)]
+
+# Sort the df by csd and year
+york_18to19 = york_18to19.sort_values(['csd', 'year'], ascending=[True, True])
+
+# Change units of value to 1000s, since it's consistant with year 2000 to 2017
+col_list_2 = [i for i in list(york_18to19.columns) if i.startswith('value')]
+york_18to19[col_list] = york_18to19[col_list_2]/1000
+
+
+##############################################
+#  Combine york_00to17 and york_18to19   #
+##############################################
+
+
+new_york_region = pd.concat([york_00to17, york_18to19], ignore_index=True)
+new_york_region = new_york_region.sort_values(['csd', 'year'], ascending=[True, True])
+
+
+# Export result as csv file
+# new_york_region.to_csv('cleaned_building_permits_2000_2019_york_region.csv', index=False)
