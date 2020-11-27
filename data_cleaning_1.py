@@ -1,15 +1,15 @@
 import numpy as np
 import pandas as pd
 import os
+from pathlib import Path
 
-def change_path(input_path):
-    return os.chdir(input_path)
 
-change_path('/Users/fredaxin/projects/project_vaughan')
+DIR = Path(os.path.dirname(os.path.realpath(__file__)))
+PROCESSED_DATA_DIR = DIR / 'processed_data_1'
 
-top_25 = pd.read_csv('./processed_data_1/building_permits_2000_2019_top_25.csv')
-york_region = pd.read_csv('./processed_data_1/building_permits_2000_2019_york_region.csv')
-census = pd.read_csv('./processed_data_1/census_2001_to_2016.csv')
+top_25 = pd.read_csv(PROCESSED_DATA_DIR / 'building_permits_2000_2019_top_25.csv')
+york_region = pd.read_csv(PROCESSED_DATA_DIR / 'building_permits_2000_2019_york_region.csv')
+census = pd.read_csv(PROCESSED_DATA_DIR / 'census_2001_to_2016.csv')
 
 
 # Change data types

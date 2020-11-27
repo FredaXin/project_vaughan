@@ -1,23 +1,23 @@
 import numpy as np
 import pandas as pd
 import os
+from pathlib import Path
 
-def change_path(input_path):
-    return os.chdir(input_path)
+DIR = Path(os.path.dirname(os.path.realpath(__file__)))
+PROCESSED_DATA_DIR = DIR / 'processed_data_1'
+CENSUS_DATA_DIR = DIR / 'census_data'
 
-change_path('/Users/fredaxin/projects/project_vaughan')
-
-top_25 = pd.read_csv('./processed_data_1/cleaned_building_permits_2000_2019_top_25.csv')
-york = pd.read_csv('./processed_data_1/cleaned_building_permits_2000_2019_york_region.csv')
+top_25 = pd.read_csv(PROCESSED_DATA_DIR / 'cleaned_building_permits_2000_2019_top_25.csv')
+york = pd.read_csv(PROCESSED_DATA_DIR / 'cleaned_building_permits_2000_2019_york_region.csv')
 
 
 ##########################
 #  Process Census Data   #
 ##########################
 
-census_2006_2001 = pd.read_csv('./census_data/census_2006_2001.csv')
-census_2011_2006 = pd.read_csv('./census_data/census_2011_2006.csv', encoding='latin-1')
-census_2016_2011 = pd.read_csv('./census_data/census_2016_2011.csv', encoding='latin-1')
+census_2006_2001 = pd.read_csv(CENSUS_DATA_DIR / 'census_2006_2001.csv')
+census_2011_2006 = pd.read_csv(CENSUS_DATA_DIR / 'census_2011_2006.csv', encoding='latin-1')
+census_2016_2011 = pd.read_csv(CENSUS_DATA_DIR / 'census_2016_2011.csv', encoding='latin-1')
 
 
 # Check if the 'Geographic code' is unique
@@ -126,8 +126,8 @@ top_25 = top_25.apply(pop_set_func, axis=1)
 york = york.apply(pop_set_func, axis=1)
 
 # Export result as csv file
-top_25.to_csv('cleaned_building_permits&pop_top_25.csv', index=False)
-york.to_csv('cleaned_building_permits&pop_york_region.csv', index=False)
+# top_25.to_csv('cleaned_building_permits&pop_top_25.csv', index=False)
+# york.to_csv('cleaned_building_permits&pop_york_region.csv', index=False)
 
 
 
