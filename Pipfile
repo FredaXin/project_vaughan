@@ -12,6 +12,11 @@ html5lib = "*"
 requests = "*"
 pandas = "*"
 numpy = "*"
+jupyterlab = "*"
+matplotlib = "*"
+seaborn = "*"
+sklearn = "*"
+statsmodels = "*"
 
 [requires]
 python_version = "3.7"
