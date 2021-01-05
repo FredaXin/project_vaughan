@@ -51,14 +51,15 @@ Naming issues for geographical divisions (names are not unique). For example:
 • The same city could appear on multiple rows due to municipality designation changing (eg. Markham)  
 
 ### Our goal:
-1. To turn the source data into flattened structure (i.e. tabular structure) so that other platforms, such as Tableau or Pandas, can process it
-2. To automate this process so that the result is reliable and reproducible.
+• To turn the source data into flattened structure (i.e. tabular structure) so
+that other platforms, such as Tableau or Pandas, can process it.  
+• To automate this process so that the result is reliable and reproducible.
 
 ---
 ## Mechanism
 1. [Data Cleaning Part
 I](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning.py)  
-• Cover Issue 1    
+• Address [Issue 1](#Issue-1)   
 • Use the Python Standard Library   
 • Search the source data for the CSDs of interests    
 • Reconstruct the selected CSD into tabular structure
