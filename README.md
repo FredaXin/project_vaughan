@@ -3,21 +3,18 @@
 Authors: [Freda Xin](www.linkedin.com/in/freda-xin/), [Wayne Chan](https://www.linkedin.com/in/waynechan-cma/)
 
 ---
-## Table of Contents
+## Library Contents
 
-Data Cleaning:  
-&nbsp;&nbsp;&nbsp;&nbsp;• [Data Cleaning Part
+1. [Data Cleaning Part
 I](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning.py)  
-&nbsp;&nbsp;&nbsp;&nbsp;• [Data Cleaning Part
+2. [Data Cleaning Part
 II](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_1.py)  
-&nbsp;&nbsp;&nbsp;&nbsp;• [Data Cleaning Part
+3. [Data Cleaning Part
 III](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_2.py) 
+4. [Web-scraping code for StatCan](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
+5. [EDA and Feature Engineering
+   code](https://github.com/FredaXin/project_vaughan/blob/main/eda.ipynb)  
 
-Web-scraping: [Web-scraping code for StatCan](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
-
-EDA: [EDA and Feature Engineering code](https://github.com/FredaXin/project_vaughan/blob/main/eda.ipynb)
-
-  
 
 
 ---
@@ -27,7 +24,7 @@ Building Permits data in Canada from 2000 to 2019. The goal of this project is
 to synthesize and interpret the data, and to identify any trends showcasing
 Vaughan’s growth for marketing purposes and to attract investments.  
 
-The most challenging and time-consuming part of this process is data cleaning. To solve this challenge and to
+The most challenging and time-consuming part of this process is data cleaning. To solve challenges and to
 automate the data cleaning process, we built a custom Python library. 
 
 The following sections of the README will focus on the mechanism of the custom
@@ -38,16 +35,17 @@ Python library. For key findings of this project, please see  the PPT in the
 ---
 ## Background
 
-### Challenges of the Source Data:  
+### Issues of the Source Data:  
 
-1. Complex and overly formatted data in Excel: the source data was formatted in
-hierarchical structures that needs to be flattened and transformed into tubular
+#### Issue 1: 
+Complex and overly formatted data in Excel: the source data was formatted in hierarchical structures that needs to be flattened and transformed into tubular
 structures.
 
-2. Format inconsistency between years: the formats and structures of the source
-data varies between years. 
+#### Issue 2:
+Format inconsistency between years: the formats and structures of the source data varies between years. 
 
-3. Naming issues for geographical divisions (names are not unique). For example:  
+#### Issue 3:
+Naming issues for geographical divisions (names are not unique). For example:  
 • Hamilton, Windsor, Victoria exist in multiple provinces  
 • Toronto could refer to the CD or the CSD  
 • The same city could appear on multiple rows due to municipality designation changing (eg. Markham)  
@@ -55,6 +53,23 @@ data varies between years.
 ### Our goal:
 1. To turn the source data into flattened structure (i.e. tabular structure) so that other platforms, such as Tableau or Pandas, can process it
 2. To automate this process so that the result is reliable and reproducible.
+
+---
+## Mechanism
+1. [Data Cleaning Part
+I](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning.py)  
+• Cover Issue 1    
+• Use the Python Standard Library   
+• Search the source data for the CSDs of interests    
+• Reconstruct the selected CSD into tabular structure
+
+2. [Data Cleaning Part
+II](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_1.py)  
+Fine tune the data cleaning process and 
+3. Combine the Building Permits data with Census data 
+4. Feature engineering to add calculated fields 
+
+
 
 ---
 ## References
