@@ -13,9 +13,9 @@ II](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_1.py)
 &nbsp;&nbsp;&nbsp;&nbsp;• [Data Cleaning Part
 III](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_2.py) 
 
-[Web-scraping](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
+Web-scraping: [Web-scraping code for StatCan](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
 
-[EDA](https://github.com/FredaXin/project_vaughan/blob/main/eda.ipynb)
+EDA: [EDA and Feature Engineering code](https://github.com/FredaXin/project_vaughan/blob/main/eda.ipynb)
 
   
 
@@ -29,7 +29,7 @@ Our client
 ## References: 
 
 
-• [Stat Canada Example on Analysis of Building Permits](https://www150.statcan.gc.ca/n1/daily-quotidien/201001/dq201001a-eng.htm)
+• [StatCan Example on Analysis of Building Permits](https://www150.statcan.gc.ca/n1/daily-quotidien/201001/dq201001a-eng.htm)
 
 • [2016 and 2011 censuses](https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/hlt-fst/pd-pl/Table.cfm?Lang=Eng&T=307&SR=1&S=3&O=D&RPP=9999&PR=0)
  
