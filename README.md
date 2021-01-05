@@ -57,13 +57,15 @@ that other platforms, such as Tableau or Pandas, can process it.
 
 ---
 ## Mechanism
-1. [Web-scraping code for
-   StatCan](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
+1. [Web-scraping
+   code for StatCan](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
     
-   • [The 2001 and 2006 Census data on StatCan](https://www12.statcan.gc.ca/census-recensement/2006/dp-pd/hlt/97-550/Index.cfm?TPL=P1C&Page=RETR&LANG=Eng&T=307&S=3&O=D&RPP=699) does not offer a
-   downloadable `.csv` version; this code does the web-scraping for the data on
+   • Tools: Beautiful Soup, Python Standard Library  
+   • [The 2001 and 2006 Census data on
+   StatCan](https://www12.statcan.gc.ca/census-recensement/2006/dp-pd/hlt/97-550/Index.cfm?TPL=P1C&Page=RETR&LANG=Eng&T=307&S=3&O=D&RPP=699)
+   does not offer a downloadable `.csv` version; this code does the web-scraping
+   for the data on
    the webpage.  
-   • Tools: Beautiful Soup, Python Standard Library 
 
 2. [Data Cleaning Part
 I](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning.py)  
