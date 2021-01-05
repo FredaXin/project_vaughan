@@ -5,16 +5,16 @@ Authors: [Freda Xin](www.linkedin.com/in/freda-xin/), [Wayne Chan](https://www.l
 ---
 ## Library Contents
 
-1. [Data Cleaning Part
+• [Data Cleaning Part
 I](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning.py)  
-2. [Data Cleaning Part
+• [Data Cleaning Part
 II](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_1.py)  
-3. [Data Cleaning Part
-III](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_2.py) 
-4. [Web-scraping code for StatCan](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
-5. [EDA and Feature Engineering
+• [Data Cleaning Part
+III](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_2.py)  
+• [EDA and Feature Engineering
    code](https://github.com/FredaXin/project_vaughan/blob/main/eda.ipynb)  
-
+• [Web-scraping code for
+StatCan](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
 
 
 ---
@@ -57,20 +57,38 @@ that other platforms, such as Tableau or Pandas, can process it.
 
 ---
 ## Mechanism
-1. [Data Cleaning Part
+1. [Web-scraping code for
+   StatCan](https://github.com/FredaXin/project_vaughan/blob/main/scraper_statcan.py)
+    
+   • [The 2001 and 2006 Census data on StatCan](https://www12.statcan.gc.ca/census-recensement/2006/dp-pd/hlt/97-550/Index.cfm?TPL=P1C&Page=RETR&LANG=Eng&T=307&S=3&O=D&RPP=699) does not offer a
+   downloadable `.csv` version; this code does the web-scraping for the data on
+   the webpage.  
+   • Tools: Beautiful Soup, Python Standard Library 
+
+2. [Data Cleaning Part
 I](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning.py)  
-• Address [Issue 1](#Issue-1)   
-• Use the Python Standard Library   
+• Addressed [Issue 1](#Issue-1)   
+• Tools: Python Standard Library   
 • Search the source data for the CSDs of interests    
 • Reconstruct the selected CSD into tabular structure
 
-2. [Data Cleaning Part
+3. [Data Cleaning Part
 II](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_1.py)  
-Fine tune the data cleaning process and 
-3. Combine the Building Permits data with Census data 
-4. Feature engineering to add calculated fields 
+• Addressed [Issue 2](#Issue-2) and [Issue 3](#Issue-3)  
+• Tools: NumPy, Pandas  
+• Fine tune the data cleaning process  
 
 
+4. [Data Cleaning Part
+III](https://github.com/FredaXin/project_vaughan/blob/main/data_cleaning_2.py)  
+• Tools: NumPy, Pandas   
+• Process and clean the Census data   
+• Combine the Building Permits data with Census data  
+
+5. [EDA and Feature Engineering
+   code](https://github.com/FredaXin/project_vaughan/blob/main/eda.ipynb)   
+• Tools: NumPy, Pandas   
+• Initial EDA and feature engineering to add calculated fields 
 
 ---
 ## References
