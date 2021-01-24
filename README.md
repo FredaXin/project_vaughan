@@ -28,8 +28,7 @@ The most challenging and time-consuming part of this process is data cleaning. T
 automate the data cleaning process, we built a custom Python library. 
 
 The following sections of the README will focus on the mechanism of the custom
-Python library. For key findings of this project, please see  the PPT in the
-[link](https://docs.google.com/presentation/d/1zjLx8IJUHk1ILf2BKMBMqEbVAtviD5W3aG89NV7ENkI/edit?usp=sharing). 
+Python library. 
 
 
 ---
